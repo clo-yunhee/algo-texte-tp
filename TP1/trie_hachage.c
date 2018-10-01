@@ -5,10 +5,11 @@
 #ifdef TRIE_USE_HACHAGE
 
 
+
 /* --- HASH TABLE FUNCTIONS --- */
 
 int hashKey(int maxNode, int startNode, unsigned char letter) {
-    return ((startNote + letter) * 2654435761) % (maxNode + 1);
+    return ((startNode + letter) * 2654435761) % maxNode;
 }
 
 List listFind(List list, int startNode, unsigned char letter) {
@@ -25,7 +26,10 @@ List listFind(List list, int startNode, unsigned char letter) {
 }
 
 int pushIfAbsent(Trie trie, int startNode, unsigned char letter) {
-    if (trie == NULL) return -1;
+    if (trie == NULL) {
+        fprintf(stderr, "Trie is NULL.\n");
+        return -1;
+    }
 
     int key;
     List list, found;
@@ -35,7 +39,7 @@ int pushIfAbsent(Trie trie, int startNode, unsigned char letter) {
 
     found = listFind(list, startNode, letter);
     if (found != NULL) {
-        return found->endNode; // it exists, don't do more.
+        return found->targetNode; // it exists, don't do more.
     }
 
     // push the missing entry at the head of the list.
@@ -46,16 +50,21 @@ int pushIfAbsent(Trie trie, int startNode, unsigned char letter) {
         return -1;
     }
     
-    int endNode = ++trie->nextNode; // new node number
+    int targetNode = ++trie->nextNode; // new node number
+
+    if (targetNode >= trie->maxNode) {
+        fprintf(stderr, "Maximum number of nodes reached: %d\n", trie->maxNode);
+        return -1;
+    }
 
     head->startNode = startNode;
-    head->endNode = endNode;
+    head->targetNode = targetNode;
     head->letter = letter;
     head->next = list;
     
     trie->transition[key] = head;
 
-    return endNode;
+    return targetNode;
 }
 
 /* --- TRIE FUNCTIONS --- */
@@ -69,19 +78,22 @@ Trie createTrie(int maxNode) {
 
     trie->maxNode = maxNode;
     trie->nextNode = 0;
-    trie->transition = calloc(maxNode, sizeof(List));
+    trie->transition = calloc((size_t) (LOAD_FACTOR * maxNode), sizeof(List));
     trie->finite = calloc(maxNode, sizeof(char));
 
     return trie;
 }
 
 void insertInTrie(Trie trie, unsigned char *w) {
-
     int node = 0;
 
     // iterate to the end of the string
     while (w != NULL && *w != '\0') {
         node = pushIfAbsent(trie, node, *w);
+        if (node == -1) {
+            fprintf(stderr, "Could not insert in trie.\n");
+            return;
+        }
 
         ++w;
     }
@@ -96,8 +108,58 @@ int isInTrie(Trie trie, unsigned char *w) {
     List list, found;
 
     node = 0;
-    key = hashKey(trie->maxNode, 0, *w);
-    // repeat pushIfAbsent but with tests only
+    
+    while (w != NULL && *w != '\0') {
+        key = hashKey(trie->maxNode, node, *w);
+        list = trie->transition[key];
+
+        found = listFind(list, node, *w);
+        if (found == NULL) {
+            // no entry, return false
+            return 0;
+        }
+
+        node = found->targetNode;
+
+        ++w;
+    }
+
+    // if everything passed check if the last node is a terminal state.
+
+    return trie->finite[node];
+}
+
+void printDepth(char buff[], int depth, Trie trie) {
+    
+    int node;
+
+    List list;
+
+}
+
+void printTrie(Trie trie) {
+    
+    size_t length = (size_t) (LOAD_FACTOR * trie->maxNode);
+
+    int node;
+    List list;
+
+    for (int k = 0; k < length; ++k) {
+        
+        
+
+    }
+
+
+
+    void allwords( char buff[], int depth, Trie trie) {
+      buff[depth] = current char at this depth
+      //    
+      //      // recursive calls
+      //        allwords(buff,depth+1,t->child);
+      //         
+      //           // print buff when you reach a leaf of some sort.
+      //           }
 }
 
 

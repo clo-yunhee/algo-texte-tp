@@ -2,8 +2,8 @@
 #define TRIE_H
 
 
-#define TRIE_USE_HACHAGE
-//#define TRIE_USE_MATRICE
+//#define TRIE_USE_HACHAGE
+#define TRIE_USE_MATRICE
 
 
 #include "trie_hachage.h"
@@ -14,5 +14,11 @@ Trie createTrie(int maxNode);
 void insertInTrie(Trie trie, unsigned char *w);
 
 int isInTrie(Trie trie, unsigned char *w);
+
+Trie buildPref(unsigned char *w);
+
+Trie buildSuff(unsigned char *w);
+
+Trie buildFact(unsigned char *w);
 
 #endif // TRIE_H

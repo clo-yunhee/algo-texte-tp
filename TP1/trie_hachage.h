@@ -21,6 +21,20 @@ struct _trie {
 
 typedef struct _trie *Trie;
 
+
+// load factor
+#define LOAD_FACTOR 1.5
+
+// hash the pair (startNode, letter) to [0..maxNode-1]
+int hashKey(int maxNode, int startNode, unsigned char letter);
+
+// search for the pair (startNode, letter) in list, NULL otherwise
+List listFind(List list, int startNode, unsigned char letter);
+
+// push the node (startNode, letter) in trie, returning the target node number
+int pushIfAbsent(Trie trie, int startNode, unsigned char letter);
+
+
 # endif // TRIE_USE_HACHAGE
 
 #endif // TRIE_HACHAGE_H
