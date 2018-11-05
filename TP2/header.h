@@ -8,7 +8,10 @@
 
 #define decl_rech(name) unsigned int rech_##name (const char *mot, const size_t motlen, const char *wor, const size_t worlen)
 
-#define rech(name, mot, wor) rech_##name(mot, strlen(mot), wor, strlen(wor))
+#define rech2(name, mot, motlen, wor, worlen) rech_##name(mot, motlen, wor, worlen)
+
+#define rech(name, mot, wor)                  rech2(name, mot, strlen(mot), wor, strlen(wor))
+#define rechn(name, mot, motlen, wor, worlen) rech2(name, mot, motlen, wor, worlen)
 
 int min(int, int);
 int max(int, int);
