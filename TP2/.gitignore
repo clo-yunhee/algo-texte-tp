@@ -1,3 +1,7 @@
 /*.alg
-/genset
+/.generate-data
 /data/
+/bin/
+/.obj/
+/.dep/
+

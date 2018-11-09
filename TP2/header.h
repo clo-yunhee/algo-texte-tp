@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <stddef.h>
 #include <limits.h>
 
 #define decl_rech(name) unsigned int rech_##name (const char *mot, const size_t motlen, const char *wor, const size_t worlen)

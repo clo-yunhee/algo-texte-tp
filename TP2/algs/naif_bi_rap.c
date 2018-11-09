@@ -5,7 +5,7 @@ decl_rech(naif_bi_rap) {
     const size_t n = worlen - motlen + 1;
 
     unsigned int occ;
-    int i, j; // j: wor, i: mot
+    unsigned int i, j; // j: wor, i: mot
 
     char first;
     

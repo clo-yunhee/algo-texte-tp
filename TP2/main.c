@@ -52,9 +52,9 @@ int main(int argc, char *argv[]) {
     while (fgets(mot, MAX_LINE, fmots) != NULL) {
         motlen = strnlen(mot, MAX_LINE);
         // remove trailing newline
-        /*if (mot[motlen - 1] == '\n') {
+        if (mot[motlen - 1] == '\n') {
             mot[motlen - 1] = '\0';
-        }*/
+        }
 
         occ = rechn(RALG, mot, motlen, text, textlen);
 

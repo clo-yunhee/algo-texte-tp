@@ -28,7 +28,7 @@ decl_rech(boyer_moore) {
         } else {
             j += max(
                 bon_suff[i],
-                dern_occ[wor[j - motlen + 1 + i]] - motlen + 1 + i
+                dern_occ[(int) wor[j - motlen + 1 + i]] - motlen + 1 + i
             );
         }
     }
@@ -41,10 +41,12 @@ decl_rech(boyer_moore) {
 }
 
 int *bm_calc_suff(const char *mot, size_t motlen) {
-    int i, f, g, *suff;
+    int i, f, g;
+    int *suff;
 
     suff = malloc(sizeof(int) * motlen);
 
+    f = motlen - 2;
     g = motlen - 1;
     suff[motlen - 1] = motlen;
 
@@ -94,15 +96,15 @@ int *bm_calc_bon_suff(const char *mot, size_t motlen) {
 }
 
 int *bm_calc_dern_occ(const char *mot, size_t motlen) {
-    int i, *dern_occ;
+    int *dern_occ;
 
     dern_occ = malloc(sizeof(int) * (UCHAR_MAX + 1));
 
     for (int a = 0; a <= UCHAR_MAX; ++a) {
         dern_occ[a] = motlen;
     }
-    for (i = 0; i <= motlen - 2; ++i) {
-        dern_occ[mot[i]] = motlen - 1 - i;
+    for (int i = 0; i <= motlen - 2; ++i) {
+        dern_occ[(int) mot[i]] = motlen - 1 - i;
     }
 
     return dern_occ;
