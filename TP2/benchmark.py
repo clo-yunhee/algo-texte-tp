@@ -1,6 +1,9 @@
 #!/usr/bin/python3
 
 import os, argparse, subprocess
+from tqdm import tqdm, trange
+
+BAR_FMT = '{desc}: [{percentage:3.0f}%] |{bar}| [{n_fmt}/{total_fmt}]'
 
 def define_constants(**kwargs):
     global NB_ITER, CARD, LENGTHS
@@ -8,6 +11,12 @@ def define_constants(**kwargs):
     NB_ITER = kwargs['nb_iter']
     CARD = kwargs['card']
     LENGTHS = kwargs['lengths']
+
+def bar(collection, desc, pos):
+    return tqdm(collection, bar_format=BAR_FMT, position=pos, mininterval=0, miniters=1, dynamic_ncos=True, desc=desc.ljust(20))
+
+def rbar(num, desc, pos):
+    return bar(range(num), desc, pos)
 
 def ensure_dir_exists(dirname):
     if os.path.isdir(dirname):
@@ -57,7 +66,7 @@ def enumerate_data_files(text_fmt='data/texte_{cd}',
             data_wd[lg] = words_fmt.format(cd=cd, lg=lg)
     return data
 
-def time_alg_card(alg, card_files):
+def time_alg_card(alg, card, card_files):
     x = []
     y = []
 
@@ -66,43 +75,44 @@ def time_alg_card(alg, card_files):
     text = card_files['text']
     words = card_files['words']
 
-    print('     + Word length: ', end='')
+    with bar(words.items(), desc='Character count {}'.format(card), pos=2) as t1:
+        for (lg, word) in t1:
+            time_total = 0.0
+            with rbar(NB_ITER, desc='Word length {}'.format(lg), pos=3) as t2:
+                for it in t2:
+                    time_total += time_command(alg_file, word, text, '-q')
+            time_total /= NB_ITER
+            time_total = round(time_total, 5)
 
-    for (lg, word) in words.items():
-        time_total = 0.0
-        print('...', end='', flush=True)
-        for it in range(NB_ITER):
-            time_total += time_command(alg_file, word, text, '-q')
-        time_total /= NB_ITER
-        time_total = round(time_total, 5)
+#            print('     + Word length: {}'.format(lg))
 
-        print('\b\b\b', lg, ', ', sep='', end='', flush=True)
-
-        x.append(lg)
-        y.append(time_total)
-
-    print('\b\b ')
+            x.append(lg)
+            y.append(time_total)
 
     return (x, y)
 
 def time_alg(alg, files):
     alg_times = {}
 
-    for (card, card_files) in files.items():
-        print('   - Character count:', card)
+    with bar(files.items(), desc='Algorithm {}'.format(alg['name']), pos=1) as t:
+        for (card, card_files) in t:
+#            print('   - Character count:', card)
 
-        alg_times[card] = time_alg_card(alg, card_files)
+            alg_times[card] = time_alg_card(alg, card, card_files)
+        t.clear()
 
     return alg_times
 
 def timeall(algs, data):
     times = {}
 
-    for alg in algs:
-        alg_name = alg['name']
-        print(' * Algorithm:', alg_name)
+    with bar(algs, desc="Benchmarking...", pos=0) as t:
+        for alg in t:
+            alg_name = alg['name']
+#            print(' * Algorithm:', alg_name)
 
-        times[alg_name] = time_alg(alg, data)
+            times[alg_name] = time_alg(alg, data)
+        t.clear()
 
     return times
 
@@ -132,6 +142,7 @@ def plot_card(plt, algs, card, times):
 
         plt.plot(alg_times[0], alg_times[1], label=alg_name)
 
+    plt.ylim(bottom=0.0)
     plt.legend(title='Algorithms', title_fontsize=12)
 
     plt.suptitle('card(A) = {}'.format(card))
