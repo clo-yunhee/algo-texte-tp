@@ -21,7 +21,10 @@ int main(int argc, char *argv[]) {
     }
 
     if (argc > 3 && strcmp(argv[3], "-q") == 0) {
-        freopen("/dev/null", "w", stdout);
+        if (freopen("/dev/null", "w", stdout) == NULL) {
+            perror("Couldn't redirect standard output to /dev/null");
+            fclose(stdout);
+        }
     }
 
     const char *motsfile;
