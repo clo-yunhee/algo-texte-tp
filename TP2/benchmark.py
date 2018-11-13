@@ -3,7 +3,7 @@
 import os, argparse, subprocess
 from tqdm import tqdm, trange
 
-BAR_FMT = '{desc}: [{percentage:3.0f}%] |{bar}| [{n_fmt}/{total_fmt}]'
+BAR_FMT = '{desc:<20}:  {n_fmt:>} of {total_fmt} [{percentage:3.0f}%] |{bar}|'
 
 def define_constants(**kwargs):
     global NB_ITER, CARD, LENGTHS
@@ -12,10 +12,10 @@ def define_constants(**kwargs):
     CARD = kwargs['card']
     LENGTHS = kwargs['lengths']
 
-def bar(collection, desc, pos):
-    return tqdm(collection, bar_format=BAR_FMT, position=pos, mininterval=0, miniters=1, dynamic_ncos=True, desc=desc.ljust(20))
+def bar(collection, desc, pos, unit='cases'):
+    return tqdm(collection, bar_format=BAR_FMT, position=pos, mininterval=0, miniters=1, dynamic_ncols=True, desc=desc, unit=unit)
 
-def rbar(num, desc, pos):
+def rbar(num, desc, pos, unit='cases'):
     return bar(range(num), desc, pos)
 
 def ensure_dir_exists(dirname):
