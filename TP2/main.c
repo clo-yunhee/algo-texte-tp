@@ -7,10 +7,16 @@
 #define MAX_LINE 128
 
 /* trim the last character if it's a newline */
-inline void rtrim(char *str, size_t *len) {
-    size_t l = --(*len);
-    if (str[l] == '\n')
-        str[l] = '\0';
+inline char *rtrim(char *string, ssize_t *len, char junk) {
+    char *original = string + *len;
+
+    while (original != string && *(--original) == junk)
+        --(*len);
+
+    if (*original != '\0')
+        original[*original == junk ? 0 : 1] = '\0';
+
+    return string;
 }
 
 int main(int argc, char *argv[]) {
@@ -36,11 +42,9 @@ int main(int argc, char *argv[]) {
     int it;
     unsigned int occ;
 
-    char mot[MAX_LINE];
-    size_t motlen;
-    
-    char *text;
-    size_t textlen;
+    char *mot, *text;
+    ssize_t motlen, textlen;
+    size_t readlen;
     
     bool islast;
 
@@ -60,20 +64,21 @@ int main(int argc, char *argv[]) {
     }
 
     text = NULL;
-    textlen = 0;
-    if (getline(&text, &textlen, ftext) == -1) {
+    readlen = 0;
+    if ((textlen = getdelim(&text, &readlen, '\0', ftext)) == -1) {
         perror("Couldn't read the haystack file");
         return EXIT_FAILURE;
     }
-    rtrim(text, &textlen);
+    rtrim(text, &textlen, '\n');
 
     // print in python list format [occ_1, occ_2, ..., occ_n]
     printf("[");
 
     it = 1;
-    while (fgets(mot, MAX_LINE, fmots) != NULL) {
-        motlen = strnlen(mot, MAX_LINE);
-        rtrim(mot, &motlen);
+    mot = NULL;
+    readlen = 0;
+    while ((motlen = getline(&mot, &readlen, fmots)) != -1) {
+        rtrim(mot, &motlen, '\n');
 
         occ = rechn(RALG, mot, motlen, text, textlen);
 
@@ -90,12 +95,14 @@ int main(int argc, char *argv[]) {
             printf("%d, ", occ);
         }
 
-        ++it;
-
         // print newline every N=10 entries
-        if (!islast && it % 10 == 1) {
+        if (!islast && it % 10 == 0) {
             printf("\n ");
         }
+
+        ++it;
+        mot = NULL;
+        readlen = 0;
     }
 
     printf("]\n");
