@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include "alg_ac.h"
 
 void dispose_ac(struct ac_data *data) {

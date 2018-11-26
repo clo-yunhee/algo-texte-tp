@@ -3,24 +3,16 @@
 
 # ifdef TRIE_USE_HACHAGE
 
-struct _list {
-    int startNode,        // etat de depart
-        targetNode;       // etat d'arrivee
-    char letter; // etiquette de la transition
-    struct _list *next;
-};
-
-typedef struct _list *List;
+#include "transition_list.h"
 
 struct _trie {
-    size_t maxNode;      // nombre max de noeuds
-    int lastNode;     // nindice du prochain noeud disponible
-    List *transition; // listes d'adjacence
-    char *finite;     // etats terminaux
+    size_t maxNode;        // nombre max de noeuds
+    int lastNode;          // nindice du prochain noeud disponible
+    TransList *transition; // listes d'adjacence
+    char *finite;          // etats terminaux
 };
 
 typedef struct _trie *Trie;
-
 
 // load factor
 #define LOAD_FACTOR 1.5

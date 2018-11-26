@@ -1,5 +1,5 @@
-#ifndef H_QUEUE_H
-#define H_QUEUE_H
+#ifndef QUEUE_H
+#define QUEUE_H
 
 #include <stddef.h>
 
@@ -22,4 +22,4 @@ int dequeue(Queue queue);
 
 void freeQueue(Queue queue);
 
-#endif // H_QUEUE_H
+#endif // QUEUE_H

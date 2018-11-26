@@ -2,10 +2,12 @@
 #define TRIE_H
 
 
-//#define TRIE_USE_HACHAGE
-#define TRIE_USE_MATRICE
+#define TRIE_USE_HACHAGE
+//#define TRIE_USE_MATRICE
 
 #include <stddef.h>
+
+#include "transition_list.h"
 
 #include "trie_hachage.h"
 #include "trie_matrice.h"
@@ -25,6 +27,8 @@ Trie buildFact(const char *w);
 int nextNode(Trie trie, int start, char a);
 
 int nextNodeOrNew(Trie trie, int start, char a);
+
+TransList nextNodes(Trie trie, int start);
 
 void freeTrie(Trie trie);
 

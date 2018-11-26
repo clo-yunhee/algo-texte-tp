@@ -1,5 +1,5 @@
-#ifndef H_ALG_AC_H
-#define H_ALG_AC_H
+#ifndef ALG_AC_H
+#define ALG_AC_H
 
 #include <stddef.h>
 
@@ -23,4 +23,4 @@ void init_ac_complete(struct ac_data *data);
 
 void dispose_ac(struct ac_data *data);
 
-#endif // H_ALG_AC_H
+#endif // ALG_AC_H
