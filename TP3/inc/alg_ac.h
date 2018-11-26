@@ -21,6 +21,8 @@ struct ac_data *init_ac(const char *words[], int k);
 
 void init_ac_complete(struct ac_data *data);
 
+unsigned int count_occ_ac(struct ac_data *data, const char *text);
+
 void dispose_ac(struct ac_data *data);
 
 #endif // ALG_AC_H

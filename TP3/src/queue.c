@@ -1,14 +1,14 @@
 #include <stdlib.h>
-
+#include <stdio.h>
 #include "queue.h"
 
 Queue createQueue(size_t capacity) {
-    Queue queue = malloc(sizeof(Queue));
-    
+    Queue queue = malloc(sizeof(Queue)
+                    + capacity * sizeof(int));
+
     queue->capacity = capacity;
     queue->front = queue->size = 0;
     queue->rear = capacity - 1;
-    queue->array = malloc(capacity * sizeof(int));
 
     return queue;
 }

@@ -12,8 +12,6 @@ struct _tr_list {
 typedef struct _tr_list * TransList;
 
 
-#define EMPTY_LIST (NULL)
-
 void pushTrans(TransList *listptr, int startNode, int targetNode, char letter);
 
 void nextTrans(TransList *listptr);

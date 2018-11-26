@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <limits.h>
 
 #include "trie.h"
 
@@ -30,4 +31,27 @@ int isInTrie(Trie trie, const char *w) {
     }
 
     return trie->finite[node];
+}
+
+void mergeTriesFrom(Trie dest, int destStart, Trie src, int srcStart) {
+    int destTarget, srcTarget;
+
+    for (size_t c = 0; c < UCHAR_MAX; ++c) {
+        srcTarget = nextNode(src, srcStart, c);
+        if (srcTarget != -1) {
+            destTarget = nextNodeOrNew(dest, destStart, c);
+            mergeTriesFrom(dest, destTarget, src, srcTarget); 
+        }
+    }
+}
+
+void mergeTries(Trie *dest, Trie src, size_t maxNode) {
+    if (src == NULL) { // if there's nothing to merge, do nothing
+        return;
+    }
+    if (*dest == NULL) { // if the destination is empty, create a trie
+        *dest = createTrie(maxNode);
+    }
+
+    mergeTriesFrom(*dest, 0, src, 0);
 }

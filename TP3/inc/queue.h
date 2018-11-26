@@ -6,7 +6,7 @@
 struct _queue {
     size_t front, rear;
     size_t capacity, size;
-    int *array;
+    int array[];
 };
 
 typedef struct _queue *Queue;

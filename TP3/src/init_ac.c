@@ -12,13 +12,16 @@ struct ac_data *init_ac(const char *words[], int k) {
     /* l'arbre préfixe à forcément moins d'états que la somme des longueurs */
     size = 0;
     for (size_t i = 0; i < k; ++i) {
-        size += strlen(words[i]);    
+        size += strlen(words[i]); 
     }
     data->max_size = size;
 
-    data->words = createTrie(data->max_size);
-    data->sortie = calloc(data->max_size, sizeof(*data->sortie));
-    data->suppl = malloc(data->max_size * sizeof(*data->suppl));
+    data->words = createTrie(size);
+    data->sortie = malloc(size * sizeof(*data->sortie));
+    data->suppl = malloc(size * sizeof(*data->suppl));
+
+    for (size_t i = 0; i < size; ++i)
+        data->sortie[i] = NULL; 
 
     Trie singleton;
 
@@ -26,13 +29,16 @@ struct ac_data *init_ac(const char *words[], int k) {
     for (size_t i = 0; i < k; ++i) {
         insertInTrie(data->words, words[i]);
 
-        singleton = createTrie(data->max_size);
+        singleton = createTrie(size);
         insertInTrie(singleton, words[i]);
         data->sortie[data->words->lastNode] = singleton;
     }
 
+    // self transition on the initial state
+    addSelfTrans(data->words);
+
     // generate the rest of sortie and suppl
     init_ac_complete(data);
 
-    return 0;
+    return data;
 }
