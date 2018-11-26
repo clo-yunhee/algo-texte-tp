@@ -7,6 +7,8 @@
 #include <stdint.h>
 #include <limits.h>
 
+#include <sys/random.h>
+
 #include "mtrand.h"
 
 
@@ -25,7 +27,7 @@
 /** Parses base-10 number into res , returns a negative value on error. */
 signed char stoi(const char *str, size_t *res);
 
-/** Random number with mt19937, both bounds included */
+/** Random number with mt19937, between min (inclusive) and max (exclusive) */
 size_t randrange(size_t min, size_t max);
 
 /** Returns basename of the path (pointer on the same string) */
@@ -64,8 +66,8 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
 
-    if (nb_lettres > MAX_NB) {
-        fprintf(stderr, "Usage: la taille de l'alphabet doit être inférieure à %d\n", MAX_NB);
+    if (nb_lettres < 1 || nb_lettres > MAX_NB) {
+        fprintf(stderr, "Usage: la taille de l'alphabet doit être positive et inférieure à %d\n", MAX_NB);
     }
     
     size_t i, lg;
@@ -78,13 +80,15 @@ int main(int argc, char *argv[]) {
         alphabet[i] = (char) (START + i);
     }
     
-    // init mt19937 random generator
-    sgenrand(time(NULL));
+    // initialise the random number generator
+    unsigned long seed; 
+    getrandom(&seed, sizeof(seed), 0);
+    sgenrand(seed);
   
     while (count > 0) {
-        lg = randrange(lg_min, lg_max);
+        lg = randrange(lg_min, lg_max+1);
         for (i = 0; i < lg; ++i) {
-            lettre = alphabet[randrange(0, nb_lettres - 1)];
+            lettre = alphabet[randrange(0, nb_lettres)];
             putchar(lettre);
         }
 
