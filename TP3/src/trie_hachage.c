@@ -7,8 +7,8 @@
 
 /* --- HASH TABLE FUNCTIONS --- */
 
-int hashKey(size_t maxNode, int startNode, char letter) {
-    return ((startNode + letter) * 2654435761) % ((int) LOAD_FACTOR * maxNode);
+int hashKey(size_t capacity, int startNode, char letter) {
+    return ((startNode + letter) * 2654435761) % capacity;
 }
 
 /* --- TRIE FUNCTIONS --- */
@@ -22,7 +22,8 @@ Trie createTrie(size_t maxNode) {
 
     trie->maxNode = maxNode;
     trie->lastNode = 0;
-    trie->transition = calloc((size_t) (LOAD_FACTOR * maxNode), sizeof(TransList));
+    trie->capacity = (size_t) (LOAD_FACTOR * maxNode);
+    trie->transition = calloc(trie->capacity, sizeof(TransList));
     trie->finite = calloc(maxNode, sizeof(char));
 
     return trie;
@@ -59,9 +60,29 @@ int nextNodeOrNew(Trie trie, int start, char letter) {
     return targetNode;
 }
 
+TransList nextNodes(Trie trie, int start) {
+    TransList res, cur;
+
+    res = NULL;
+
+    for (size_t n = 0; n < trie->capacity; ++n) {
+        cur = trie->transition[n];
+
+        while (hasNextTrans(cur)) {
+            if (cur->startNode == start) {
+                pushTrans(&res, start, cur->letter, cur->targetNode);
+            }
+
+            nextTrans(&cur);
+        }
+    }
+    
+    return res;
+}
+
 void freeTrie(Trie trie) {
     if (trie != NULL) {
-        for (size_t n = 0; n < trie->maxNode; ++n) {
+        for (size_t n = 0; n < trie->capacity; ++n) {
             freeList(trie->transition[n]);
         }
         free(trie->transition);
