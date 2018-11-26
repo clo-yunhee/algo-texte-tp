@@ -59,5 +59,20 @@ void freeTrie(Trie trie) {
     }
 }
 
+TransList nextNodes(Trie trie, int start) {
+    TransList res;
+    int target;
+
+    res = NULL;
+
+    for (size_t c = 0; c < UCHAR_MAX; ++c) {
+        target = trie->transition[start][c];
+        if (target != -1) {
+            pushRes(&res, start, c, target);
+        }
+    }
+
+    return res;
+}
 
 #endif // TRIE_USE_MATRICE
