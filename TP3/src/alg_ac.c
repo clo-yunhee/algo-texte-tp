@@ -17,7 +17,6 @@ unsigned int count_occ_ac(struct ac_data *data, const char *text) {
 
         if (data->sortie[e] != NULL) {
             // found occurrence
-            printf("one\n");
             occ++;
         }
 

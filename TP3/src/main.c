@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     trimend(text, &textlen, '\n');
+    text = strdup(text);
 
     fclose(f_texte);
 
@@ -79,7 +80,7 @@ int main(int argc, char *argv[]) {
         }
         trimend(mot, &motlen, '\n');
         
-        mots[mots_count] = mot;
+        mots[mots_count] = strdup(mot);
         mots_count++;
     }
 

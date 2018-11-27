@@ -2,8 +2,8 @@
 #define TRIE_H
 
 
-#define TRIE_USE_HACHAGE
-//#define TRIE_USE_MATRICE
+//#define TRIE_USE_HACHAGE
+#define TRIE_USE_MATRICE
 
 #include <stddef.h>
 
