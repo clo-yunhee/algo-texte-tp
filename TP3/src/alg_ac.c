@@ -10,10 +10,10 @@ unsigned int count_occ_ac(struct ac_data *data, const char *text) {
     e = 0;
 
     while (*text != '\0') {
-        while (nextNode(data->words, e, *text) == -1) {
+        while (nextNode(data->words, e, (unsigned char) *text) == -1) {
             e = data->suppl[e];
         }
-        e = nextNode(data->words, e, *text);
+        e = nextNode(data->words, e, (unsigned char) *text);
 
         if (data->sortie[e] != NULL) {
             // found occurrence

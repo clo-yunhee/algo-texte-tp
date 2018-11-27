@@ -6,7 +6,7 @@
 struct _trie {
     int maxNode;      // nombre max de noeuds
     int lastNode;     // indice du prochain noeud disponible
-    int *transition;  // matrice de transitions
+    int **transition; // matrice de transitions
     char *finite;     // etats terminaux
 };
 

@@ -2,7 +2,7 @@
 
 #include "transition_list.h"
 
-void pushTrans(TransList *listptr, int startNode, int targetNode, char letter) {
+void pushTrans(TransList *listptr, int startNode, int targetNode, unsigned char letter) {
     if (listptr == NULL) return;
 
     TransList head = malloc(sizeof(*head));
@@ -26,7 +26,7 @@ int hasNextTrans(TransList list) {
     return list != NULL;
 }
 
-TransList findTrans(TransList list, int startNode, char letter) {
+TransList findTrans(TransList list, int startNode, unsigned char letter) {
     while (hasNextTrans(list)) {
         if (list->startNode == startNode
                 && list->letter == letter) {

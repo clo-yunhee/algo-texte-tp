@@ -19,7 +19,7 @@ typedef struct _trie *Trie;
 #define LOAD_FACTOR 1.5
 
 // hash the pair (startNode, letter) to [0..capacity-1]
-int hashKey(size_t capacity, int startNode, char letter);
+int hashKey(size_t capacity, int startNode, unsigned char letter);
 
 # endif // TRIE_USE_HACHAGE
 

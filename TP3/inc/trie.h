@@ -19,9 +19,9 @@ int insertInTrie(Trie trie, const char *w);
 
 int isInTrie(Trie trie, const char *w);
 
-int nextNode(Trie trie, int start, char a);
+int nextNode(Trie trie, int start, unsigned char a);
 
-int nextNodeOrNew(Trie trie, int start, char a);
+int nextNodeOrNew(Trie trie, int start, unsigned char a);
 
 TransList nextNodes(Trie trie, int start);
 

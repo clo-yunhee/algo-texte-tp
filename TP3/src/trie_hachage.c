@@ -8,7 +8,7 @@
 
 /* --- HASH TABLE FUNCTIONS --- */
 
-int hashKey(size_t capacity, int startNode, char letter) {
+int hashKey(size_t capacity, int startNode, unsigned char letter) {
     return ((startNode + letter) * 2654435761) % capacity;
 }
 
@@ -35,7 +35,7 @@ Trie createTrie(size_t maxNode) {
     return trie;
 }
 
-int nextNode(Trie trie, int start, char letter) {
+int nextNode(Trie trie, int start, unsigned char letter) {
     int key = hashKey(trie->capacity, start, letter);
 
     TransList list = findTrans(trie->transition[key], start, letter);
@@ -43,7 +43,7 @@ int nextNode(Trie trie, int start, char letter) {
     return hasNextTrans(list) ? list->targetNode : -1;
 }
 
-int nextNodeOrNew(Trie trie, int start, char letter) {
+int nextNodeOrNew(Trie trie, int start, unsigned char letter) {
     int key = hashKey(trie->capacity, start, letter);
 
     TransList list = findTrans(trie->transition[key], start, letter);

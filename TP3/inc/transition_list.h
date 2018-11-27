@@ -5,20 +5,20 @@
 struct _tr_list {
     int startNode,          // état de départ
         targetNode;         // état d'arrivée
-    char letter;            // étiquette de la transition
+    unsigned char letter;   // étiquette de la transition
     struct _tr_list *next;  // chaine suivante, ou NULL
 };
 
 typedef struct _tr_list * TransList;
 
 
-void pushTrans(TransList *listptr, int startNode, int targetNode, char letter);
+void pushTrans(TransList *listptr, int startNode, int targetNode, unsigned char letter);
 
 void nextTrans(TransList *listptr);
 
 int hasNextTrans(TransList list);
 
-TransList findTrans(TransList list, int startNode, char letter);
+TransList findTrans(TransList list, int startNode, unsigned char letter);
 
 void freeList(TransList list);
 

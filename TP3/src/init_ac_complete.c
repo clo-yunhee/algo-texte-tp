@@ -9,7 +9,7 @@ void init_ac_complete(struct ac_data *data) {
     Queue f;
     TransList l;
     int e, r, p, s, sup_p;
-    char a;
+    unsigned char a;
     
     e = 0;
 
