@@ -36,7 +36,7 @@ Trie createTrie(size_t maxNode) {
 }
 
 int nextNode(Trie trie, int start, char letter) {
-    int key = hashKey(trie->maxNode, start, letter);
+    int key = hashKey(trie->capacity, start, letter);
 
     TransList list = findTrans(trie->transition[key], start, letter);
 
@@ -44,7 +44,7 @@ int nextNode(Trie trie, int start, char letter) {
 }
 
 int nextNodeOrNew(Trie trie, int start, char letter) {
-    int key = hashKey(trie->maxNode, start, letter);
+    int key = hashKey(trie->capacity, start, letter);
 
     TransList list = findTrans(trie->transition[key], start, letter);
 
