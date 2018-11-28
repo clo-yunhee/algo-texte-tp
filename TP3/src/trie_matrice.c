@@ -40,7 +40,7 @@ int nextNode(Trie trie, int start, unsigned char a) {
 int nextNodeOrNew(Trie trie, int start, unsigned char a) {
     int next = nextNode(trie, start, a);
     if (next == -1) {
-        next = trie->lastNode++;
+        next = ++trie->lastNode;
         if (next >= trie->maxNode) {
             fprintf(stderr, "Maximum number of nodes reached: %d\n", trie->maxNode);
             return -1;
