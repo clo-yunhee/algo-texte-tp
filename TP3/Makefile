@@ -144,5 +144,5 @@ clean-gen:
 
 $(BIN_DIR)/generator:
 	cd generator && $(MAKE)
-	ln -srf generator/bin/generator bin/generator
-
+	ln -srf generator/bin/generate bin/genere-mots
+	ln -srf generator/bin/generate bin/genere-texte

@@ -11,28 +11,23 @@
 #define USAGE_STRING "%s [f_mots] [f_texte]"
 
 /** Trim trailing characters */
-const char *trimend(char *string, ssize_t *len, char junk) {
-    char *original = string + *len;
+void trimend(char *string, ssize_t *len, char junk);
 
-    while (original != string && *(--original) == junk)
-        --(*len);
+/** Read one line of the file */
+const char *readline(FILE *f);
 
-    if (*original != '\0')
-        original[*original == junk ? 0 : 1] = '\0';
+/** Read the mots file and fill it in a dynamic array */
+const char **readmots(FILE *f, size_t *length);
 
-    return string;
-}
 
 int main(int argc, char *argv[]) {
 
     FILE *f_mots, *f_texte;
 
-    size_t readlen;
-    char *text, *mot;
-    ssize_t textlen, motlen;
+    const char *text;
 
     const char **mots;
-    size_t mots_count, mots_cap;
+    size_t mots_count;
 
     struct ac_data *data;
     unsigned int occ;
@@ -55,35 +50,11 @@ int main(int argc, char *argv[]) {
     }
 
     // read texte file
-    text = NULL;
-    readlen = 0;
-    if ((textlen = getdelim(&text, &readlen, '\0', f_texte)) == -1) {
-        perror("Couldn't read texte file");
-        return EXIT_FAILURE;
-    }
-    trimend(text, &textlen, '\n');
-
+    text = readline(f_texte);
     fclose(f_texte);
 
     // read mots file
-    mots = malloc(MOTS_INISIZE * sizeof(*mots));
-    mots_cap = MOTS_INISIZE;
-    mots_count = 0;
-   
-    mot = NULL;
-    readlen = 0;
-    while ((motlen = getline(&mot, &readlen, f_mots)) != -1) {
-        if (mots_count == mots_cap) {
-            mots_cap = (size_t) (mots_cap * MOTS_LOADFAC);
-            mots = realloc(mots, mots_cap * sizeof(*mots));
-        }
-        trimend(mot, &motlen, '\n');
-        
-        mots[mots_count] = strdup(mot);
-        mots_count++;
-    }
-
-    free(mot);
+    mots = readmots(f_mots, &mots_count);
     fclose(f_mots);
     
     // execute alg
@@ -97,14 +68,68 @@ int main(int argc, char *argv[]) {
 
     // dispose of all resources
 
+    free((char *) text);
     for (size_t n = 0; n < mots_count; ++n) {
         free((char *) mots[n]);
     }
     free(mots);
-    free(text);
 
     dispose_ac(data);
 
     return EXIT_SUCCESS;
+}
 
+const char **readmots(FILE *f, size_t *length) {
+    const char *mot, **mots;
+    size_t capacity;
+
+    mots = malloc(MOTS_INISIZE * sizeof(*mots));
+    capacity = MOTS_INISIZE;
+    *length = 0;
+   
+    while ((mot = readline(f)) != NULL) {
+        if (*length == capacity) {
+            capacity = (size_t) (capacity * MOTS_LOADFAC);
+            mots = realloc(mots, capacity * sizeof(*mots));
+        }
+        
+        mots[(*length)++] = mot;
+    }
+
+    return mots;
+}
+
+
+void trimend(char *string, ssize_t *len, char junk) {
+    char *original = string + *len;
+
+    while (original != string && *(--original) == junk)
+        --(*len);
+
+    if (*original != '\0')
+        original[*original == junk ? 0 : 1] = '\0';
+}
+
+const char *readline(FILE *f) {
+    char *glmot;
+    size_t readlen;
+    
+    char *mot;
+    ssize_t motlen;
+
+    glmot = NULL;
+    readlen = 0;
+
+    motlen = getline(&glmot, &readlen, f);
+    if (motlen == -1) {
+        free(glmot);
+        return NULL;
+    }
+    
+    mot = strdup(glmot);
+    free(glmot);
+
+    trimend(mot, &motlen, '\n');
+
+    return mot;
 }
