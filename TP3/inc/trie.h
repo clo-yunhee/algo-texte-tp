@@ -28,4 +28,6 @@ void mergeTries(Trie *dest, Trie src, size_t maxNode);
 
 void freeTrie(Trie trie);
 
+size_t countTrie(Trie trie);
+
 #endif // TRIE_H

@@ -3,6 +3,7 @@
 unsigned int count_occ_ac(struct ac_data *data, const char *text) {
     unsigned int occ;
     int e;
+    Trie s;
 
     occ = 0;
     e = 0;
@@ -13,9 +14,11 @@ unsigned int count_occ_ac(struct ac_data *data, const char *text) {
         }
         e = nextNode(data->words, e, (unsigned char) *text, NULL);
 
-        if (data->sortie[e] != NULL) {
+        s = data->sortie[e];
+
+        if (s != NULL) {
             // found occurrence
-            occ++;
+            occ += countTrie(s);
         }
 
         ++text;

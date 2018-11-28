@@ -59,4 +59,14 @@ void mergeTries(Trie *dest, Trie src, size_t maxNode) {
     mergeTriesFrom(*dest, 0, src, 0);
 }
 
+size_t countTrie(Trie trie) {
+    size_t res, i;
 
+    res = 0;
+
+    for (i = 0; i < trie->maxNode; ++i) {
+        res += trie->finite[i];
+    }
+
+    return res;
+}
