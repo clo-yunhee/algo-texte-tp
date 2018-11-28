@@ -87,11 +87,7 @@ int main(int argc, char *argv[]) {
     fclose(f_mots);
     
     // execute alg
-    puts("init ac");
-
     data = init_ac(mots, mots_count);
-
-    puts("count");
 
     occ = count_occ_ac(data, text);
 
