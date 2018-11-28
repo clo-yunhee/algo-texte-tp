@@ -105,9 +105,9 @@ D_FILES := $(C_FILES:$(SRC_DIR)/%.c=$(DEP_DIR)/%.d)
 
 ##--- Phony make rules
 
-.PHONY: $(TARGET) all clean re
+.PHONY: $(TARGET) clean clean-dist re
 
-all: $(TARGET) generator
+all: $(TARGET)
 
 $(TARGET): $(BIN_DIR)/$(TARGET)
 
@@ -116,9 +116,6 @@ clean:
 
 clean-dist: clean
 	-rm -f $(BIN_DIR)/$(TARGET)
-
-clean-test:
-	-rm -f $(BIN_DIR)/$(TEST_TARGET)
 
 re: clean-dist all
 

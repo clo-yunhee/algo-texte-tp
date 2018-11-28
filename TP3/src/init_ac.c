@@ -28,10 +28,10 @@ struct ac_data *init_ac(const char *words[], int k) {
 
     // insert every word and mark the last state
     for (size_t i = 0; i < k; ++i) {
-        insertInTrie(data->words, words[i]);
+        last = insertInTrie(data->words, words[i]);
 
         singleton = createTrie(size);
-        last = insertInTrie(singleton, words[i]);
+        insertInTrie(singleton, words[i]);
         data->sortie[last] = singleton;
     }
 
