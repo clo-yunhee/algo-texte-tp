@@ -16,7 +16,7 @@ int main(void) {
     enqueue(q, 80);
     enqueue(q, 13);
 
-    assert(isFull(q));
+    assert( isFull(q) );
 
     assert( dequeue(q) == 2 );
     assert( dequeue(q) == 80 );

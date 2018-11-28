@@ -2,7 +2,7 @@
 
 # MIT License
 # 
-# Copyright (c) 2018 Chloé Ichinose
+# Copyright (c) 2018 Rika Ichinose
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,17 @@
 
 ##--- Constants and configuration
 
-TARGET := aho-corasick
+TRIE ?= hachage
+
+TARGET = ac-$(TRIE)
 
 # Modify as necessary
-CFLAGS  +=
+ifeq ($(TRIE),matrice) 
+CFLAGS += -DTRIE_USE_MATRICE
+else
+CFLAGS += -DTRIE_USE_HACHAGE
+endif
+
 LDFLAGS +=
 
 SRC_DIR := src
@@ -100,11 +107,11 @@ D_FILES := $(C_FILES:$(SRC_DIR)/%.c=$(DEP_DIR)/%.d)
 
 .PHONY: $(TARGET) all clean re
 
-all: $(TARGET)
+all: $(TARGET) generator
 
 $(TARGET): $(BIN_DIR)/$(TARGET)
 
-clean:
+clean: 
 	-rm -f $(O_FILES) $(D_FILES)
 
 clean-dist: clean
@@ -114,11 +121,6 @@ clean-test:
 	-rm -f $(BIN_DIR)/$(TEST_TARGET)
 
 re: clean-dist all
-
-test: $(TEST_TARGET)
-	$(BIN_DIR)/$(TEST_TARGET)
-
-$(TEST_TARGET): $(BIN_DIR)/$(TEST_TARGET)
 
 ##--- Building make rules
 
@@ -133,4 +135,17 @@ $(DEP_DIR)/%.d: ;
 .PRECIOUS: $(DEP_DIR)/%.d
 
 -include $(D_FILES)
+
+
+## Added : Generator
+
+.PHONY: generator clean-gen
+generator: $(BIN_DIR)/generator
+
+clean-gen:
+	cd generator && $(MAKE) clean
+
+$(BIN_DIR)/generator:
+	cd generator && $(MAKE)
+	ln -srf generator/bin/generator bin/generator
 
