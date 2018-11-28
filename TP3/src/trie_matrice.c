@@ -37,7 +37,7 @@ int nextNode(Trie trie, int start, unsigned char a) {
     return trie->transition[start][a];
 }
 
-int nextNodeOrNew(Trie trie, int start, unsigned char a) {
+int nextNodeOrNew(Trie trie, int start, unsigned char a, char finite) {
     int next = nextNode(trie, start, a);
     if (next == -1) {
         next = ++trie->lastNode;
@@ -46,6 +46,9 @@ int nextNodeOrNew(Trie trie, int start, unsigned char a) {
             return -1;
         }
         trie->transition[start][a] = next;
+    }
+    if (finite) {
+        trie->finite[next] = 1;
     }
     return next;
 }

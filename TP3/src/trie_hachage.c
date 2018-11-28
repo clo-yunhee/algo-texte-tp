@@ -35,33 +35,47 @@ Trie createTrie(size_t maxNode) {
     return trie;
 }
 
-int nextNode(Trie trie, int start, unsigned char letter) {
+int nextNode(Trie trie, int start, unsigned char letter, char *finite) {
     int key = hashKey(trie->capacity, start, letter);
 
     TransList list = findTrans(trie->transition[key], start, letter);
 
-    return hasNextTrans(list) ? list->targetNode : -1;
-}
-
-int nextNodeOrNew(Trie trie, int start, unsigned char letter) {
-    int key = hashKey(trie->capacity, start, letter);
-
-    TransList list = findTrans(trie->transition[key], start, letter);
-
-    if (hasNextTrans(list)) {
-        return list->targetNode;
-    }
-    
-    // add the new node
-    
-    int targetNode = ++trie->lastNode; // new node number
-    if (targetNode >= trie->maxNode) {
-        fprintf(stderr, "Maximum number of nodes reached: %lu\n", trie->maxNode);
+    if (!hasNextTrans(list)) {
         return -1;
     }
 
-    pushTrans(&trie->transition[key],
-            start, targetNode, letter);
+    if (finite != NULL) {
+        *finite = trie->finite[list->targetNode];
+    }
+    return list->targetNode;
+}
+
+int nextNodeOrNew(Trie trie, int start, unsigned char letter, char finite) {
+    int key = hashKey(trie->capacity, start, letter);
+
+    TransList list = findTrans(trie->transition[key], start, letter);
+
+    int targetNode;
+
+    if (hasNextTrans(list)) {
+        targetNode = list->targetNode;
+    } else { 
+        // add the new node
+        
+        targetNode = ++trie->lastNode; // new node number
+        if (targetNode >= trie->maxNode) {
+            fprintf(stderr, "Maximum number of nodes reached: %lu\n", trie->maxNode);
+            return -1;
+        }
+
+        pushTrans(&trie->transition[key],
+                start, targetNode, letter);
+    }
+
+    // if finite, add
+    if (finite) {
+        trie->finite[targetNode] = 1;
+    }
 
     return targetNode;
 }

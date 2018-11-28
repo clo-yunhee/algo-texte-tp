@@ -2,8 +2,8 @@
 #define TRIE_H
 
 
-//#define TRIE_USE_HACHAGE
-#define TRIE_USE_MATRICE
+#define TRIE_USE_HACHAGE
+//#define TRIE_USE_MATRICE
 
 #include <stddef.h>
 
@@ -19,9 +19,9 @@ int insertInTrie(Trie trie, const char *w);
 
 int isInTrie(Trie trie, const char *w);
 
-int nextNode(Trie trie, int start, unsigned char a);
+int nextNode(Trie trie, int start, unsigned char a, char *finite);
 
-int nextNodeOrNew(Trie trie, int start, unsigned char a);
+int nextNodeOrNew(Trie trie, int start, unsigned char a, char finite);
 
 TransList nextNodes(Trie trie, int start);
 

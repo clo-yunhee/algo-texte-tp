@@ -3,7 +3,7 @@
 #include "queue.h"
 
 Queue createQueue(size_t capacity) {
-    Queue queue = malloc(sizeof(Queue)
+    Queue queue = malloc(sizeof(*queue)
                     + capacity * sizeof(int));
 
     queue->capacity = capacity;
@@ -40,7 +40,6 @@ char isEmpty(Queue queue) {
 
 void freeQueue(Queue queue) {
     if (queue != NULL) {
-        free(queue->array);
         free(queue);
     }
 }

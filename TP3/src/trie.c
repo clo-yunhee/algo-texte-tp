@@ -9,7 +9,7 @@ int insertInTrie(Trie trie, const char *w) {
 
     // iterate on the string from start to finish
     while (w != NULL && *w != '\0') {
-        node = nextNodeOrNew(trie, node, (unsigned char) *w);
+        node = nextNodeOrNew(trie, node, (unsigned char) *w, 0);
 
         ++w;
     }
@@ -24,7 +24,7 @@ int isInTrie(Trie trie, const char *w) {
     int node = 0;
 
     while (w != NULL && *w != '\0') {
-        node = nextNode(trie, node, (unsigned char) *w);
+        node = nextNode(trie, node, (unsigned char) *w, NULL);
         if (node == -1) {
             return 0; // isn't in the set
         }
@@ -37,10 +37,12 @@ int isInTrie(Trie trie, const char *w) {
 void mergeTriesFrom(Trie dest, int destStart, Trie src, int srcStart) {
     int destTarget, srcTarget;
 
+    char finite;
+
     for (size_t c = 0; c < UCHAR_MAX; ++c) {
-        srcTarget = nextNode(src, srcStart, c);
-        if (srcTarget != -1 && srcStart != srcTarget) {
-            destTarget = nextNodeOrNew(dest, destStart, c);
+        srcTarget = nextNode(src, srcStart, c, &finite);
+        if (srcTarget != -1) {
+            destTarget = nextNodeOrNew(dest, destStart, c, finite);
             mergeTriesFrom(dest, destTarget, src, srcTarget); 
         }
     }

@@ -7,7 +7,7 @@
 
 void init_ac_complete(struct ac_data *data) {
     Queue f;
-    TransList l;
+    TransList l, it;
     int e, r, p, s, sup_p;
     unsigned char a;
     
@@ -15,40 +15,40 @@ void init_ac_complete(struct ac_data *data) {
 
     f = createQueue(UCHAR_MAX + 1); // max breadth
 
-    l = nextNodes(data->words, e);
-    while (hasNextTrans(l)) {
-        p = l->targetNode;
+    l = it = nextNodes(data->words, e);
+    while (hasNextTrans(it)) {
+        p = it->targetNode;
 
         enqueue(f, p);
         data->suppl[p] = e;
 
-        nextTrans(&l);
+        nextTrans(&it);
     }
+    freeList(l);
 
     while (!isEmpty(f)) {
         r = dequeue(f);
 
-        l = nextNodes(data->words, r);
-        while (hasNextTrans(l)) {
-            r = l->startNode;
-            a = l->letter;            
-            p = l->targetNode;
+        l = it = nextNodes(data->words, r);
+        while (hasNextTrans(it)) {
+            r = it->startNode;
+            a = it->letter;            
+            p = it->targetNode;
             
             enqueue(f, p);
 
             s = data->suppl[r];
-            while (nextNode(data->words, s, a) == -1) {
+            while (nextNode(data->words, s, a, NULL) == -1) {
                 s = data->suppl[s];
             }
 
-            sup_p = nextNode(data->words, s, a);
-
-            data->suppl[p] = sup_p;
+            data->suppl[p] = sup_p = nextNode(data->words, s, a, NULL);            
 
             mergeTries(&data->sortie[p], data->sortie[sup_p], data->max_size);
 
-            nextTrans(&l);
+            nextTrans(&it);
         }
+        freeList(l);
     }
 
 }
