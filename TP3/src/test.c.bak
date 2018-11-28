@@ -3,6 +3,23 @@
 
 #include <assert.h>
 
+inline void assertSeries(Trie t) {
+
+    assert( isInTrie(t, "zzz") );
+    assert( isInTrie(t, "c") );
+    assert( isInTrie(t, "abcb") );
+
+    assert( isInTrie(t, "ab") );
+    assert( isInTrie(t, "cj") );
+
+    assert( !isInTrie(t, "") );
+    assert( !isInTrie(t, "a") );
+    assert( !isInTrie(t, "b") );
+    assert( !isInTrie(t, "zz") );
+    assert( !isInTrie(t, "abc") );
+
+}
+
 int main(void) {
 
     Queue q;
@@ -49,23 +66,32 @@ int main(void) {
 
     
     mergeTries(&t, x, 100);
+    assertSeries(t);
+    freeTrie(x);
+    
+    x = NULL;
+    
+    mergeTries(&x, t, 100);
+    assertSeries(x);
+    freeTrie(x);
 
-    assert( isInTrie(t, "zzz") );
-    assert( isInTrie(t, "c") );
-    assert( isInTrie(t, "abcb") );
+    x = NULL;
 
-    assert( isInTrie(t, "ab") );
-    assert( isInTrie(t, "cj") );
-
-    assert( !isInTrie(t, "") );
-    assert( !isInTrie(t, "a") );
-    assert( !isInTrie(t, "b") );
-    assert( !isInTrie(t, "zz") );
-    assert( !isInTrie(t, "abc") );
-
-
+    mergeTries(&t, x, 100);
+    assertSeries(t);
+    freeTrie(x);
     freeTrie(t);
-    //freeTrie(x);
+
+    x = NULL;
+    t = NULL;
+
+    mergeTries(&t, x, 1);
+
+    assert( t == NULL );
+
+    mergeTries(&x, t, 1);
+
+    assert( t == NULL );
 
     return 0;
 
