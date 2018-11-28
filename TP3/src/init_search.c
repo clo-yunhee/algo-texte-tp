@@ -1,9 +1,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "alg_ac.h"
+#include "search_internals.h"
 
-struct ac_data *init_ac(const char *words[], int k) {
+struct ac_data *init_search(const char *words[], int k) {
     struct ac_data *data;
     size_t size;
 
@@ -39,7 +39,7 @@ struct ac_data *init_ac(const char *words[], int k) {
     addSelfTrans(data->words);
 
     // generate the rest of sortie and suppl
-    init_ac_complete(data);
+    init_search_complete(data);
 
     return data;
 }

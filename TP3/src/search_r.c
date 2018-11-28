@@ -1,6 +1,6 @@
-#include "alg_ac.h"
+#include "search_internals.h"
 
-unsigned int count_occ_ac(struct ac_data *data, const char *text) {
+unsigned int search_r(struct ac_data *data, const char *text) {
     unsigned int occ;
     int e;
     Trie s;

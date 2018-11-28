@@ -1,9 +1,9 @@
-#include "alg_ac.h"
 #include "queue.h"
+#include "trie.h"
 
 #include <assert.h>
 
-inline void assertSeries(Trie t) {
+void assertSeries(Trie t) {
 
     assert( isInTrie(t, "zzz") );
     assert( isInTrie(t, "c") );

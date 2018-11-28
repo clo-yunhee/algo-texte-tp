@@ -1,14 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 
-#include "alg_ac.h"
+#include "search.h"
 
 
 #define MOTS_INISIZE 5
 #define MOTS_LOADFAC 1.75
 
 #define USAGE_STRING "%s [f_mots] [f_texte]"
+
 
 /** Trim trailing characters */
 void trimend(char *string, ssize_t *len, char junk);
@@ -29,7 +31,6 @@ int main(int argc, char *argv[]) {
     const char **mots;
     size_t mots_count;
 
-    struct ac_data *data;
     unsigned int occ;
 
     if (argc != 3) {
@@ -58,23 +59,17 @@ int main(int argc, char *argv[]) {
     fclose(f_mots);
     
     // execute alg
-    data = init_ac(mots, mots_count);
-
-    occ = count_occ_ac(data, text);
+    occ = search(mots, mots_count, text);
 
     // print result
-    
     printf("%d\n", occ);
 
     // dispose of all resources
-
     free((char *) text);
     for (size_t n = 0; n < mots_count; ++n) {
         free((char *) mots[n]);
     }
     free(mots);
-
-    dispose_ac(data);
 
     return EXIT_SUCCESS;
 }

@@ -1,11 +1,11 @@
 #include <stdio.h>
 #include <limits.h>
 
-#include "alg_ac.h"
+#include "search_internals.h"
 
 #include "queue.h"
 
-void init_ac_complete(struct ac_data *data) {
+void init_search_complete(struct ac_data *data) {
     Queue f;
     TransList l, it;
     int e, r, p, s, sup_p;
