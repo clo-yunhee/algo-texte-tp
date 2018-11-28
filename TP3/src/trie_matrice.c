@@ -9,6 +9,8 @@
 
 /* --- TRIE FUNCTIONS --- */
 
+#define TRANSITION(trie, n, c) ((trie)->transition[(n) * UCHAR_MAX + c])
+
 Trie createTrie(size_t maxNode) {
     Trie trie = malloc(sizeof(struct _trie));
     if (trie == NULL) {
@@ -19,14 +21,13 @@ Trie createTrie(size_t maxNode) {
     trie->maxNode = maxNode;
     trie->lastNode = 0;
 
-    trie->transition = malloc(maxNode * sizeof(int *));
-    trie->finite = malloc(maxNode * sizeof(char));
+    TRANSITION(trie,  = malloc(maxNode * UCHAR_MAX * sizeof(*TRANSITION(trie, ));
+    trie->finite = malloc(maxNode * sizeof(*trie->finite));
     
     for (size_t i = 0; i < maxNode; ++i) {
         trie->finite[i] = 0;
-        trie->transition[i] = malloc(UCHAR_MAX * sizeof(int));
         for (size_t c = 0; c < UCHAR_MAX; ++c) {
-            trie->transition[i][c] = -1;
+            TRANSITION(trie, i, c) = -1;
         }
     }
 
@@ -34,7 +35,7 @@ Trie createTrie(size_t maxNode) {
 }
 
 int nextNode(Trie trie, int start, unsigned char a) {
-    return trie->transition[start][a];
+    return TRANSITION(trie, start, a);
 }
 
 int nextNodeOrNew(Trie trie, int start, unsigned char a, char finite) {
@@ -45,7 +46,7 @@ int nextNodeOrNew(Trie trie, int start, unsigned char a, char finite) {
             fprintf(stderr, "Maximum number of nodes reached: %d\n", trie->maxNode);
             return -1;
         }
-        trie->transition[start][a] = next;
+        TRANSITION(trie, start, a) = next;
     }
     if (finite) {
         trie->finite[next] = 1;
@@ -60,7 +61,7 @@ TransList nextNodes(Trie trie, int start) {
     res = NULL;
 
     for (size_t c = 0; c < UCHAR_MAX; ++c) {
-        target = trie->transition[start][c];
+        target = TRANSITION(trie, start, c);
         if (target != -1 && start != target) {
             pushTrans(&res, start, target, c);
         }
@@ -71,17 +72,14 @@ TransList nextNodes(Trie trie, int start) {
 
 void addSelfTrans(Trie trie) {
     for (size_t c = 0; c < UCHAR_MAX; ++c) {
-        if (trie->transition[0][c] == -1) {
-            trie->transition[0][c] = 0;
+        if (TRANSITION(trie, 0, c) == -1) {
+            TRANSITION(trie, 0, c) = 0;
         }
     }
 }
 
 void freeTrie(Trie trie) {
     if (trie != NULL) {  
-        for (size_t n = 0; n < trie->maxNode; ++n) {
-            free(trie->transition[n]);
-        }
         free(trie->transition);
         free(trie->finite);
         free(trie);

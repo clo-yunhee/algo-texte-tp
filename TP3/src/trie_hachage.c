@@ -24,8 +24,8 @@ Trie createTrie(size_t maxNode) {
     trie->maxNode = maxNode;
     trie->lastNode = 0;
     trie->capacity = (size_t) (LOAD_FACTOR * maxNode);
-    trie->transition = malloc(trie->capacity * sizeof(TransList));
-    trie->finite = malloc(maxNode * sizeof(char));
+    trie->transition = malloc(trie->capacity * sizeof (*trie->transition));
+    trie->finite = malloc(maxNode * sizeof (*trie->finite));
 
     for (size_t i = 0; i < trie->capacity; ++i)
         trie->transition[i] = NULL;
