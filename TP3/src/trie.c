@@ -28,6 +28,7 @@ int isInTrie(Trie trie, const char *w) {
         if (node == -1) {
             return 0; // isn't in the set
         }
+        ++w;
     }
 
     return trie->finite[node];
