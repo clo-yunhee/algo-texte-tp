@@ -1,7 +1,5 @@
 #include "alg_ac.h"
 
-#include <stdio.h>
-
 unsigned int count_occ_ac(struct ac_data *data, const char *text) {
     unsigned int occ;
     int e;
