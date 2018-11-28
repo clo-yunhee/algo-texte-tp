@@ -62,7 +62,6 @@ int main(int argc, char *argv[]) {
         return EXIT_FAILURE;
     }
     trimend(text, &textlen, '\n');
-    text = strdup(text);
 
     fclose(f_texte);
 
@@ -84,6 +83,7 @@ int main(int argc, char *argv[]) {
         mots_count++;
     }
 
+    free(mot);
     fclose(f_mots);
     
     // execute alg

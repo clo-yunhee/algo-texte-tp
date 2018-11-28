@@ -51,4 +51,6 @@ void init_ac_complete(struct ac_data *data) {
         freeList(l);
     }
 
+    freeQueue(f);
+
 }
