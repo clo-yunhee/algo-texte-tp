@@ -1,8 +1,9 @@
+.dep
+.obj
+bin
 *.swp
-.dep/
-.obj/
-bin/
 mots3.txt
 texte3.txt
-res-ac-matrice
 res-ac-hachage
+res-ac-matrice
+ProjetAlgoTxt.tgz
